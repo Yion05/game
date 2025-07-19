@@ -989,37 +989,49 @@
                     return;
                 }
 
-                if (gameData.players.player1.userId && gameData.players.player2.userId) {
-                    lobbyMessage.textContent = "This game is full.";
-                    return;
-                }
+                // ... inside the handleRPSChoice function
+                  if (newRpsChoices.player1 && newRpsChoices.player2) {
+                    const p1Choice = newRpsChoices.player1;
+                    const p2Choice = newRpsChoices.player2;
+                    let message = `Player 1 chose ${p1Choice}, Player 2 chose ${p2Choice}. `;
+                    let newWinnerOfRPS = null;
 
-                let playerToAssign = null;
-                if (!gameData.players.player1.userId) {
-                    playerToAssign = 'player1';
-                } else if (!gameData.players.player2.userId) {
-                    playerToAssign = 'player2';
-                }
-
-                if (playerToAssign) {
-                    const updateData = {};
-                    updateData[`players.${playerToAssign}.userId`] = joinerUid;
-                    updateData.lastActionMessage = `${joinerUid.substring(0, 6)}... has joined the game!`;
-                    await updateDoc(gameRef, updateData);
-                    lobbyMessage.textContent = `Joined game ${gameId}!`;
-                    lobbyMessage.classList.remove('text-red-400');
-                    lobbyMessage.classList.add('text-green-400');
-                    startGameListener(gameId);
+                if (p1Choice === p2Choice) {
+                    // It's a tie!
+                    message += "It's a tie! Resetting for a new round.";
+                    updates.gamePhase = 'rps';
+                    updates.rpsChoices = { player1: null, player2: null }; // Reset choices
+                    updates.currentPlayerTurn = players.player1.userId; // Player 1 starts again
+                    updates.lastActionMessage = message;
+                } else if (
+                    (p1Choice === 'rock' && p2Choice === 'scissors') ||
+                    (p1Choice === 'paper' && p2Choice === 'rock') ||
+                    (p1Choice === 'scissors' && p2Choice === 'paper')
+                ) {
+                    // Player 1 wins
+                    newWinnerOfRPS = players.player1.userId;
+                    message += "Player 1 wins the round!";
+                    updates.gamePhase = 'action_choice';
+                    updates.winnerOfRPS = newWinnerOfRPS;
+                    // ... (coin updates)
+                    updates.rpsChoices = { player1: null, player2: null };
+                    updates.currentPlayerTurn = newWinnerOfRPS; // CORRECT: Set turn here
+                    updates.lastActionMessage = message;      // CORRECT: Set message here
                 } else {
-                    lobbyMessage.textContent = "Could not join game. Unexpected state.";
+                    // Player 2 wins
+                    newWinnerOfRPS = players.player2.userId;
+                    message += "Player 2 wins the round!";
+                    updates.gamePhase = 'action_choice';
+                    updates.winnerOfRPS = newWinnerOfRPS;
+                    // ... (coin updates)
+                    updates.rpsChoices = { player1: null, player2: null };
+                    updates.currentPlayerTurn = newWinnerOfRPS; // CORRECT: Set turn here
+                    updates.lastActionMessage = message;      // CORRECT: Set message here
                 }
-            } catch (error) {
-                console.error("Error joining game in Firestore:", error);
-                showMessageBox(`Failed to join game: ${error.message}. Check Firebase rules and permissions.`);
-                lobbyMessage.textContent = `Failed to join game: ${error.message}.`;
-                lobbyMessage.classList.add('text-red-400');
+
+                // After making the above changes, the old lines that set the message and turn are no longer needed here.
+                await updateGameState(updates);
             }
-        }
 
         /**
          * Starts listening for real-time updates to the game document.
