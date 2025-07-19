@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPS Drawing Battle</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -285,7 +284,6 @@
 </head>
 <body class="bg-gray-900 text-gray-100 flex items-center justify-center min-h-screen p-5">
 
-    <!-- Lobby Section -->
     <div id="lobbySection" class="lobby-section">
         <h2 class="text-3xl font-bold text-center text-blue-300">RPS Drawing Battle</h2>
         <p class="text-lg text-center">Your User ID: <span id="currentUserId" class="font-bold text-yellow-300">Loading...</span></p>
@@ -303,9 +301,7 @@
         <div id="lobbyMessage" class="text-red-400 text-sm mt-2"></div>
     </div>
 
-    <!-- Game Container (hidden initially) -->
     <div id="gameContainer" class="game-container hidden">
-        <!-- Player 1 Section -->
         <div id="player1Section" class="player-section">
             <h2 class="text-2xl font-bold text-center text-blue-300">Player 1 (<span id="player1Status">Waiting...</span>)</h2>
             <div class="health-bar-container">
@@ -322,7 +318,6 @@
 
             <h3 class="text-xl font-semibold mt-4 text-center">Rock Paper Scissors:</h3>
             <div class="flex justify-center gap-3 mt-2">
-                <!-- Player 1 RPS Buttons with GIFs -->
                 <button id="player1RockBtn" class="rps-gif-btn rps-btn" data-player="1" data-choice="rock">
                     <img src="https://editablegifs.com/gifs/gifs/rock-paper-scissors-2/thumbnail.gif" alt="Rock GIF" onerror="this.onerror=null;this.src='https://placehold.co/60x60/63b3ed/FFFFFF?text=ROCK';">
                     <span>Rock</span>
@@ -346,11 +341,9 @@
 
             <h3 class="text-xl font-semibold mt-4 text-center">Your Weapons:</h3>
             <ul id="player1WeaponsList" class="flex flex-col gap-2 mt-2">
-                <!-- Weapons will be dynamically added here -->
-            </ul>
+                </ul>
         </div>
 
-        <!-- Player 2 Section -->
         <div id="player2Section" class="player-section">
             <h2 class="text-2xl font-bold text-center text-blue-300">Player 2 (<span id="player2Status">Waiting...</span>)</h2>
             <div class="health-bar-container">
@@ -367,7 +360,6 @@
 
             <h3 class="text-xl font-semibold mt-4 text-center">Rock Paper Scissors:</h3>
             <div class="flex justify-center gap-3 mt-2">
-                <!-- Player 2 RPS Buttons with GIFs -->
                 <button id="player2RockBtn" class="rps-gif-btn rps-btn" data-player="2" data-choice="rock">
                     <img src="https://editablegifs.com/gifs/gifs/rock-paper-scissors-2/thumbnail.gif" alt="Rock GIF" onerror="this.onerror=null;this.src='https://placehold.co/60x60/63b3ed/FFFFFF?text=ROCK';">
                     <span>Rock</span>
@@ -375,7 +367,7 @@
                 <button id="player2PaperBtn" class="rps-gif-btn rps-btn" data-player="2" data-choice="paper">
                     <img src="https://editablegifs.com/gifs/gifs/rock-paper-scissors-3/thumbnail.gif" alt="Paper GIF" onerror="this.onerror=null;this.src='https://placehold.co/60x60/63b3ed/FFFFFF?text=PAPER';">
                     <span>Paper</span>
-                    </button>
+                </button>
                 <button id="player2ScissorsBtn" class="rps-gif-btn rps-btn" data-player="2" data-choice="scissors">
                     <img src="https://editablegifs.com/gifs/gifs/rock-paper-scissors-4/thumbnail.gif" alt="Scissors GIF" onerror="this.onerror=null;this.src='https://placehold.co/60x60/63b3ed/FFFFFF?text=SCISSORS';">
                     <span>Scissors</span>
@@ -391,28 +383,23 @@
 
             <h3 class="text-xl font-semibold mt-4 text-center">Your Weapons:</h3>
             <ul id="player2WeaponsList" class="flex flex-col gap-2 mt-2">
-                <!-- Weapons will be dynamically added here -->
-            </ul>
+                </ul>
         </div>
     </div>
 
-    <!-- Game Message Box -->
     <div id="gameMessageBox" class="message-box fixed bottom-5 left-1/2 -translate-x-1/2 w-11/12 md:w-1/2 z-50 hidden">
         <p id="gameMessageText" class=""></p>
         <button id="gameMessageCloseBtn" class="btn btn-primary mt-3 mx-auto">OK</button>
     </div>
 
-    <!-- Modal for Weapon Shop / Weapon Selection -->
     <div id="gameModal" class="modal hidden">
         <div class="modal-content">
             <span class="modal-close-btn" id="modalCloseBtn">&times;</span>
             <h3 id="modalTitle" class="text-2xl font-bold text-blue-300 mb-4"></h3>
             <div id="modalBody" class="flex flex-col gap-3">
-                <!-- Content will be injected here -->
-            </div>
+                </div>
             <div id="modalButtons" class="modal-buttons">
-                <!-- Buttons will be injected here -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -988,50 +975,38 @@
                     startGameListener(gameId); // Re-join listener
                     return;
                 }
-
-                // ... inside the handleRPSChoice function
-                  if (newRpsChoices.player1 && newRpsChoices.player2) {
-                    const p1Choice = newRpsChoices.player1;
-                    const p2Choice = newRpsChoices.player2;
-                    let message = `Player 1 chose ${p1Choice}, Player 2 chose ${p2Choice}. `;
-                    let newWinnerOfRPS = null;
-
-                if (p1Choice === p2Choice) {
-                    // It's a tie!
-                    message += "It's a tie! Resetting for a new round.";
-                    updates.gamePhase = 'rps';
-                    updates.rpsChoices = { player1: null, player2: null }; // Reset choices
-                    updates.currentPlayerTurn = players.player1.userId; // Player 1 starts again
-                    updates.lastActionMessage = message;
-                } else if (
-                    (p1Choice === 'rock' && p2Choice === 'scissors') ||
-                    (p1Choice === 'paper' && p2Choice === 'rock') ||
-                    (p1Choice === 'scissors' && p2Choice === 'paper')
-                ) {
-                    // Player 1 wins
-                    newWinnerOfRPS = players.player1.userId;
-                    message += "Player 1 wins the round!";
-                    updates.gamePhase = 'action_choice';
-                    updates.winnerOfRPS = newWinnerOfRPS;
-                    // ... (coin updates)
-                    updates.rpsChoices = { player1: null, player2: null };
-                    updates.currentPlayerTurn = newWinnerOfRPS; // CORRECT: Set turn here
-                    updates.lastActionMessage = message;      // CORRECT: Set message here
-                } else {
-                    // Player 2 wins
-                    newWinnerOfRPS = players.player2.userId;
-                    message += "Player 2 wins the round!";
-                    updates.gamePhase = 'action_choice';
-                    updates.winnerOfRPS = newWinnerOfRPS;
-                    // ... (coin updates)
-                    updates.rpsChoices = { player1: null, player2: null };
-                    updates.currentPlayerTurn = newWinnerOfRPS; // CORRECT: Set turn here
-                    updates.lastActionMessage = message;      // CORRECT: Set message here
+                
+                if (gameData.players.player1.userId && gameData.players.player2.userId) {
+                    lobbyMessage.textContent = "This game is full.";
+                    return;
                 }
 
-                // After making the above changes, the old lines that set the message and turn are no longer needed here.
-                await updateGameState(updates);
+                let playerToAssign = null;
+                if (!gameData.players.player1.userId) {
+                    playerToAssign = 'player1';
+                } else if (!gameData.players.player2.userId) {
+                    playerToAssign = 'player2';
+                }
+
+                if (playerToAssign) {
+                    const updateData = {};
+                    updateData[`players.${playerToAssign}.userId`] = joinerUid;
+                    updateData.lastActionMessage = `${joinerUid.substring(0, 6)}... has joined the game!`;
+                    await updateDoc(gameRef, updateData);
+                    lobbyMessage.textContent = `Joined game ${gameId}!`;
+                    lobbyMessage.classList.remove('text-red-400');
+                    lobbyMessage.classList.add('text-green-400');
+                    startGameListener(gameId);
+                } else {
+                    lobbyMessage.textContent = "Could not join game. Unexpected state.";
+                }
+            } catch (error) {
+                console.error("Error joining game in Firestore:", error);
+                showMessageBox(`Failed to join game: ${error.message}. Check Firebase rules and permissions.`);
+                lobbyMessage.textContent = `Failed to join game: ${error.message}.`;
+                lobbyMessage.classList.add('text-red-400');
             }
+        }
 
         /**
          * Starts listening for real-time updates to the game document.
@@ -1181,52 +1156,55 @@
             let updates = {
                 [`players.${playerId}.lastRPSChoice`]: newLastRPSChoice,
                 [`rpsChoices.${playerId}`]: newRpsChoices[playerId],
-                lastActionMessage: `${players[playerId].userId.substring(0, 6)}... chose ${choice}!`
             };
 
             if (newRpsChoices.player1 && newRpsChoices.player2) {
                 // Both players have chosen, determine winner
                 const p1Choice = newRpsChoices.player1;
                 const p2Choice = newRpsChoices.player2;
-
                 let message = `Player 1 chose ${p1Choice}, Player 2 chose ${p2Choice}. `;
                 let newWinnerOfRPS = null;
-                let player1Coins = players.player1.coins; // Renamed from player1Wins
-                let player2Coins = players.player2.coins; // Renamed from player2Wins
+                let player1Coins = players.player1.coins;
+                let player2Coins = players.player2.coins;
 
                 if (p1Choice === p2Choice) {
                     // It's a tie! Reset for a new RPS round.
                     message += "It's a tie! No one wins this round. Starting a new RPS round.";
-                    updates.gamePhase = 'rps'; // Stay in RPS phase
-                    updates.rpsChoices = { player1: null, player2: null }; // Reset choices
-                    updates.currentPlayerTurn = players.player1.userId; // Player 1 starts next RPS
+                    updates.gamePhase = 'rps';
+                    updates.rpsChoices = { player1: null, player2: null };
+                    updates.currentPlayerTurn = players.player1.userId;
+                    updates.lastActionMessage = message;
                 } else if (
                     (p1Choice === 'rock' && p2Choice === 'scissors') ||
                     (p1Choice === 'paper' && p2Choice === 'rock') ||
                     (p1Choice === 'scissors' && p2Choice === 'paper')
                 ) {
+                    // Player 1 wins
                     newWinnerOfRPS = players.player1.userId;
-                    player1Coins++; // Increment coins
+                    player1Coins++;
                     message += `${players.player1.userId.substring(0, 6)}... wins the RPS round! They can now choose an action.`;
                     updates.gamePhase = 'action_choice';
                     updates.winnerOfRPS = newWinnerOfRPS;
-                    updates[`players.player1.coins`] = player1Coins; // Updated to coins
-                    updates.rpsChoices = { player1: null, player2: null }; // Reset for next round
+                    updates[`players.player1.coins`] = player1Coins;
+                    updates.rpsChoices = { player1: null, player2: null };
+                    updates.currentPlayerTurn = newWinnerOfRPS;
+                    updates.lastActionMessage = message;
                 } else {
+                    // Player 2 wins
                     newWinnerOfRPS = players.player2.userId;
-                    player2Coins++; // Increment coins
+                    player2Coins++;
                     message += `${players.player2.userId.substring(0, 6)}... wins the RPS round! They can now choose an action.`;
                     updates.gamePhase = 'action_choice';
                     updates.winnerOfRPS = newWinnerOfRPS;
-                    updates[`players.player2.coins`] = player2Coins; // Updated to coins
-                    updates.rpsChoices = { player1: null, player2: null }; // Reset for next round
+                    updates[`players.player2.coins`] = player2Coins;
+                    updates.rpsChoices = { player1: null, player2: null };
+                    updates.currentPlayerTurn = newWinnerOfRPS;
+                    updates.lastActionMessage = message;
                 }
-                updates.lastActionMessage = message;
-                updates.currentPlayerTurn = newWinnerOfRPS; // Winner makes the next move (or Player 1 for tie)
             } else {
                 // Only one player has chosen, switch turn
                 updates.currentPlayerTurn = (players.player1.userId === currentUserId) ? players.player2.userId : players.player1.userId;
-                updates.lastActionMessage = `${updates.currentPlayerTurn.substring(0, 6)}..., make your choice!`;
+                updates.lastActionMessage = `${players[playerId].userId.substring(0, 6)}... has chosen. Waiting for opponent.`;
             }
 
             await updateGameState(updates);
@@ -1286,7 +1264,7 @@
                 await updateGameState(updates);
                 checkGameOver(); // Check game over after health update
             } else if (action !== 'attack' && action !== 'buy_weapon') {
-                 // If an action was taken but not attack/buy, update state and check game over
+               // If an action was taken but not attack/buy, update state and check game over
                 updates.lastActionMessage = message;
                 await updateGameState(updates);
                 checkGameOver();
